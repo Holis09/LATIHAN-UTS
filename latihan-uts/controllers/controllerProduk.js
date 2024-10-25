@@ -1,3 +1,4 @@
+const produk = require("../models/Produk");
 const Produk = require("../models/Produk")
 
 exports.index = async (req,res) => {
@@ -9,9 +10,21 @@ exports.index = async (req,res) => {
     }
 }
 
-//untuk menghandle request insert mahasiswa
+//untuk menghandle request insert produk
 const produkinsert = (req, res, next) => {
     try{
-        const
+        const (nama, deskripsi, harga, stok, kategori_id)= req.body;
+        const produk = new Produk({
+            nama,
+            deskripsi,
+            harga,
+            stok,
+            kategori_id
+        });
+        await produk.save();
+        res.status(201).json({ message: 'Product created successfully', data: produk});
+    } catch (error){
+        res.status(400).json({ message: 'Failed to create product:', error : error.message});
     }
 };
+module.exports = {produkIndex, produkinsert}
